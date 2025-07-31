@@ -59,9 +59,10 @@ Este proyecto automatiza la instalación de WordPress en Ubuntu 22.04 utilizando
 ![Configuración de red](./img/aws%20tree.png)
 
 ### WordPress instalado y funcionando
+![WordPress funcionando](./img/wordpress2.png)
 
 ![WordPress funcionando](./img/wordpress.png)
 
-## Referencias
+## Diagrama
 
-Basado en la guía: [How to Install WordPress on Ubuntu - A Step-by-Step Guide](https://medium.com/@sabinjoshi044/how-to-install-wordpress-on-ubuntu-a-step-by-step-guide-bad460da8fa5)
+![Diagrama](./img/diagrama6.png)
