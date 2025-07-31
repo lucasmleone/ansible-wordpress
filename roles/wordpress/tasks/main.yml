@@ -79,12 +79,3 @@
   ansible.builtin.service:
     name: apache2
     state: restarted
-
-# Verificar instalación con curl
-- name: Verificar que WordPress responde en el servidor
-  ansible.builtin.shell: "curl -s -o /dev/null -w '%{http_code}' http://localhost/wordpress"
-  register: curl_result
-
-- name: Mostrar resultado de la verificación con curl
-  debug:
-    msg: "Código HTTP recibido: {{ curl_result.stdout }} (200 indica OK)"
