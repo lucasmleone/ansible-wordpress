@@ -1,0 +1,90 @@
+---
+# Paso 4: Descargar y configurar WordPress
+- name: Descargar y descomprimir la última versión de WordPress
+  unarchive:
+    src: https://wordpress.org/latest.tar.gz
+    dest: "/var/www/html"
+    remote_src: yes
+    creates: "/var/www/html/wordpress"
+
+- name: Cambiar propietario y permisos de la carpeta WordPress
+  ansible.builtin.file:
+    path: /var/www/html/wordpress/
+    owner: www-data
+    group: www-data
+    mode: '0755'
+
+# Configurar wp-config.php
+- name: Copiar wp-config-sample.php a wp-config.php en el nodo remoto
+  ansible.builtin.copy:
+    src: /var/www/html/wordpress/wp-config-sample.php
+    dest: /var/www/html/wordpress/wp-config.php
+    owner: www-data
+    group: www-data
+    mode: '0755'
+    remote_src: true
+
+- name: Configurar DB_NAME en wp-config.php
+  ansible.builtin.lineinfile:
+    path: /var/www/html/wordpress/wp-config.php
+    regexp: "^define\\s*\\(\\s*'DB_NAME'.*"
+    line: "define('DB_NAME', 'wordpress_db');"
+    owner: www-data
+    group: www-data
+
+- name: Configurar DB_USER en wp-config.php
+  ansible.builtin.lineinfile:
+    path: /var/www/html/wordpress/wp-config.php
+    regexp: "^define\\s*\\(\\s*'DB_USER'.*"
+    line: "define('DB_USER', 'wordpress_user');"
+    owner: www-data
+    group: www-data
+
+- name: Configurar DB_PASSWORD en wp-config.php
+  ansible.builtin.lineinfile:
+    path: /var/www/html/wordpress/wp-config.php
+    regexp: "^define\\s*\\(\\s*'DB_PASSWORD'.*"
+    line: "define('DB_PASSWORD', 'test');"
+    owner: www-data
+    group: www-data
+
+- name: Configurar DB_HOST en wp-config.php
+  ansible.builtin.lineinfile:
+    path: /var/www/html/wordpress/wp-config.php
+    regexp: "^define\\s*\\(\\s*'DB_HOST'.*"
+    line: "define('DB_HOST', 'localhost');"
+    owner: www-data
+    group: www-data
+
+# Configurar Apache para WordPress
+- name: Copiar el archivo 000-default.conf como base para WordPress
+  ansible.builtin.copy:
+    src: /etc/apache2/sites-available/000-default.conf
+    dest: /etc/apache2/sites-available/wordpress.conf
+    remote_src: true
+
+- name: Establecer DocumentRoot correcto en wordpress.conf
+  ansible.builtin.replace:
+    path: /etc/apache2/sites-available/wordpress.conf
+    regexp: 'DocumentRoot\s+/var/www/html'
+    replace: 'DocumentRoot /var/www/html/wordpress'
+
+- name: Habilitar el sitio wordpress.conf
+  ansible.builtin.command: a2ensite wordpress.conf
+
+- name: Deshabilitar el sitio 000-default.conf
+  ansible.builtin.command: a2dissite 000-default.conf
+
+- name: Reiniciar Apache2  
+  ansible.builtin.service:
+    name: apache2
+    state: restarted
+
+# Verificar instalación con curl
+- name: Verificar que WordPress responde en el servidor
+  ansible.builtin.shell: "curl -s -o /dev/null -w '%{http_code}' http://localhost/wordpress"
+  register: curl_result
+
+- name: Mostrar resultado de la verificación con curl
+  debug:
+    msg: "Código HTTP recibido: {{ curl_result.stdout }} (200 indica OK)"

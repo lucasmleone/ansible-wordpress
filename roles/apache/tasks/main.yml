@@ -1,0 +1,16 @@
+---
+# Paso 1: Instalar y configurar Apache2
+- name: Instalar Apache2
+  ansible.builtin.apt:
+    name: apache2
+    state: latest
+
+- name: Iniciar el servicio Apache2
+  ansible.builtin.service:
+    name: apache2
+    state: started
+
+- name: Eliminar el archivo index.html por defecto de Apache
+  ansible.builtin.file:
+    path: /var/www/html/index.html
+    state: absent
