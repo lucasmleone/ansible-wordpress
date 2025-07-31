@@ -1,4 +1,4 @@
-# Desafío 6 - Instalación de WordPress con Ansible usando Roles
+# Instalación de WordPress con Ansible usando Roles
 
 Este proyecto automatiza la instalación de WordPress en Ubuntu 22.04 utilizando Ansible y una estructura modular basada en roles. Cada rol se encarga de una parte específica del proceso de instalación y configuración, cumpliendo todos los requisitos del desafío 6.
 
