@@ -25,7 +25,6 @@ Este proyecto automatiza la instalación de WordPress en Ubuntu 22.04 utilizando
 4. **Creación de base de datos y usuario para WordPress**
 5. **Descarga y configuración de WordPress**
 6. **Configuración de Apache para WordPress**
-7. **Verificación de la instalación con `curl`**
 
 ## Uso
 
@@ -41,7 +40,11 @@ Este proyecto automatiza la instalación de WordPress en Ubuntu 22.04 utilizando
    ansible-playbook -i inventory.ini site.yml
    ```
 
-3. Al finalizar, el playbook mostrará el código HTTP recibido por `curl` (200 indica que WordPress está funcionando).
+3. Al finalizar, abre tu navegador y accede a la IP pública de tu instancia EC2 para comprobar que WordPress está funcionando:
+
+   ```
+   http://<IP_PUBLICA_EC2>
+   ```
 
 ## Ejemplo de resultados y estructura
 
